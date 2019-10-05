@@ -4,13 +4,23 @@ function takeScreenShot($link){
     //website url
     $siteURL = $link;
     if(filter_var($siteURL, FILTER_VALIDATE_URL)){
-        $googlePagespeedData = file_get_contents("https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url=$siteURL&screenshot=true");
-        $googlePagespeedData = json_decode($googlePagespeedData, true);
-        $screenshot = $googlePagespeedData['screenshot']['data'];
-        $screenshot = str_replace(array('_','-'),array('/','+'),$screenshot);
-        header('Content-type: image/jpeg');
-        print base64_decode($screenshot);
-        //exit();
+			if(!$googlePagespeedData = file_get_contents("https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url=$siteURL&screenshot=true"))
+			{
+				printf("The following link returned a 404: %s", $siteURL);
+				exit;
+			}
+			if(!$googlePagespeedData = json_decode($googlePagespeedData, true))
+			{
+				print "Could not decode JSON<br>";
+				print json_last_error();
+				exit;
+			}
+
+			$screenshot = $googlePagespeedData['screenshot']['data'];
+			$screenshot = str_replace(array('_','-'),array('/','+'),$screenshot);
+			header('Content-type: image/jpeg');
+			print base64_decode($screenshot);
+			//exit();
     }
 }
 $url = isset($_GET['link'])?$_GET['link']:false;
