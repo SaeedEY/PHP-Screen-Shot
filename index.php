@@ -1,6 +1,14 @@
 <?php
 //Written in 25 August 2017 By SaeedEY.com
 
+function generate_filename()
+{
+	$url_parts = parse_url($_GET['link']);
+	$filename		= str_replace(".", "-", $url_parts["host"]);
+	$filename		.= str_replace("/", "-", $url_parts["path"]);
+	return trim($filename, "-");
+}
+
 function download_headers()
 {
 	// I'm not sure why, but we can't use zlib
@@ -15,12 +23,8 @@ function download_headers()
 	header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 	header("Cache-Control: private",false); // required for certain browsers
 
-	$mime_type = "image/jpeg";
-	$name = "image.jpg";
-
-
-	header('Content-Type: ' . $mime_type);
-	header('Content-Disposition: attachment; filename="'.$name.'"');
+	header('Content-Type: image/jpeg');
+	header('Content-Disposition: attachment; filename="'.generate_filename().'.jpg"');
 	header("Content-Transfer-Encoding: binary");
 	header('Accept-Ranges: bytes');
 
