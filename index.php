@@ -26,4 +26,15 @@ function takeScreenShot($link){
 $url = isset($_GET['link'])?$_GET['link']:false;
 if($url !== false)
     takeScreenShot($url);
+else
+{
+	printf('<form action="%s" method="get" id="screenshot_url_form">', $_SERVER["PHP_SELF"]);
+	print '<p><label for="link">Website to screenshot</label></p>';
+	print '<p><input type="url" id="link" name="link" placeholder="https:://example.org/"></p>';
+	print '<p><input type="checkbox" id="download" name="download"><label for="download">Download file</label></p>';
+	print '<p><input type="submit" value="Take screenshot"></p>';
+	print '<input type="url" id="link" name="link" placeholder="https:://example.org/">';
+	print '</form>';
+}
+
 ?>
